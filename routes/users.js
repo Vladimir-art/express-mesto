@@ -17,7 +17,7 @@ user.get('/users/:id', (req, res) => { // при динамическом роу
     return flag;
   });
   if (!flag) {
-    res.send({ message: 'Нет пользователя с таким id' });
+    res.status(404).send({ message: 'Нет пользователя с таким id' });
   }
 });
 
