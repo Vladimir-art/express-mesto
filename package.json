@@ -1,14 +1,14 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "",
+  "description": "Mesto-express",
   "main": "index.js",
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Vladimir Ermolaev <vl.ermolaevv@yandex.ru>",
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1"
