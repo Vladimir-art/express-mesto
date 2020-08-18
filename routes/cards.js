@@ -7,9 +7,14 @@ const cardsJson = path.join(__dirname, '..', 'data', 'cards.json'); // импо�
 cards.get('/', (req, res) => {
   fs.readFile(cardsJson, (err, data) => {
     if (err) {
-      return res.status(500).send({ Error: err.message });
+      return res.status(500).send({ message: err.message });
     }
-    return res.status(200).send(JSON.parse(data));
+    try {
+      const json = JSON.parse(data);
+      res.status(200).send(json);
+    } catch (e) {
+      res.status(500).send({ message: `${e.name}: ${e.message}` }); // воспроизвел ошибку при парсинге
+    }
   });
 });
 
