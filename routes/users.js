@@ -11,9 +11,9 @@ users.get('/', (req, res) => { // при гет запросе передаем 
     }
     try {
       const json = JSON.parse(data);
-      res.status(200).send(json);
+      return res.status(200).send(json);
     } catch (e) {
-      res.status(500).send({ message: `${e.name}: ${e.message}` }); // воспроизвел ошибку при парсинге
+      return res.status(500).send({ message: `${e.name}: ${e.message}` }); // воспроизвел ошибку при парсинге
     }
   });
 });
@@ -31,7 +31,7 @@ users.get('/:id', (req, res) => { // при динамическом роут
       }
       return res.status(404).send({ message: 'Нет пользователя с таким id' });
     } catch (e) {
-      res.status(500).send({ message: `${e.name}: ${e.message}` });
+      return res.status(500).send({ message: `${e.name}: ${e.message}` });
     }
   });
 });

@@ -11,9 +11,9 @@ cards.get('/', (req, res) => {
     }
     try {
       const json = JSON.parse(data);
-      res.status(200).send(json);
+      return res.status(200).send(json);
     } catch (e) {
-      res.status(500).send({ message: `${e.name}: ${e.message}` }); // воспроизвел ошибку при парсинге
+      return res.status(500).send({ message: `${e.name}: ${e.message}` }); // воспроизвел ошибку при парсинге
     }
   });
 });
