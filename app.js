@@ -1,10 +1,13 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const path = require('path'); // подключаем модуль
+const bodyParser = require('body-parser');
 
 const { PORT = 3000 } = process.env; // настраиваем порт
 
 const app = express(); // подключаем модуль express
+
+const { users } = require('./routes/users'); // подключаем модули с инфой о пользователе(ях)
+const { cards } = require('./routes/cards'); // подключаем модули с инфой с карточками
 
 // подключаемся к серверу mongo
 mongoose.connect('mongodb://localhost:27017/mestodb', {
@@ -13,10 +16,16 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
   useFindAndModify: false,
 });
 
-const { users } = require('./routes/users'); // подключаем модули с инфой о пользователе(ях)
-const { cards } = require('./routes/cards'); // подключаем модули с инфой с карточками
+app.use(bodyParser.json()); // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(express.static(path.join(__dirname, 'public'))); // подключаем страницу, сделанную на реакте
+app.use((req, res, next) => {
+  req.user = {
+    _id: '5f4bb1fd1c4d5727741ab9fb', // вставьте сюда _id созданного в предыдущем пункте пользователя
+  };
+
+  next();
+});
 
 app.use('/users', users); // используем роуты со списком пользователей
 app.use('/cards', cards); // список карточек
