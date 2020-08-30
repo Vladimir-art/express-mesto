@@ -11,7 +11,8 @@
   "author": "Vladimir Ermolaev <vl.ermolaevv@yandex.ru>",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "mongoose": "^5.10.0"
   },
   "devDependencies": {
     "eslint": "^7.6.0",
