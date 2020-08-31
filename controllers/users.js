@@ -38,11 +38,11 @@ module.exports.updateUser = (req, res) => {
     .orFail(new Error('Not found'))
     .then((u) => res.status(200).send(u))
     .catch((err) => {
+      if (err.name === 'ValidationError') return res.status(400).send({ message: `Произошла ошибка валидации ${err}` });
       if (err.message === 'Not found') {
-        res.status(404).send({ message: 'Данного пользователя не существует' });
-      } else {
-        res.status(500).send({ message: `Произошла ошибка ${err}` });
+        return res.status(404).send({ message: 'Данного пользователя не существует' });
       }
+      return res.status(500).send({ message: `Произошла ошибка ${err}` });
     });
 };
 
@@ -54,13 +54,10 @@ module.exports.updateAvatar = (req, res) => {
     .orFail(new Error('Not found'))
     .then((u) => res.status(200).send(u))
     .catch((err) => {
+      if (err.name === 'ValidationError') return res.status(400).send({ message: `Произошла ошибка валидации ${err}` });
       if (err.message === 'Not found') {
-        res.status(404).send({ message: 'Данного пользователя не существует' });
-      } else {
-        res.status(500).send({ message: `Произошла ошибка ${err}` });
+        return res.status(404).send({ message: 'Данного пользователя не существует' });
       }
+      return res.status(500).send({ message: `Произошла ошибка ${err}` });
     });
 };
-
-// const ERROR_CODE = 400;
-//       if (err.name === 'ErrorName') res.status(ERROR_CODE).send({ message: `Произошла ошибка ${err}` });

@@ -10,7 +10,7 @@ const app = express(); // подключаем модуль express
 const limiter = expressRateLimit({
   windowMs: 10 * 60 * 1000, // 10 minutes
   max: 50,
-  message: 'Too many accounts created from this IP, please try again after an 10 minutes',
+  message: 'Слишком много запросов по этому IP, попробуйте продолжить через 10 минут...',
 });
 
 const { users } = require('./routes/users'); // подключаем модули с инфой о пользователе(ях)
