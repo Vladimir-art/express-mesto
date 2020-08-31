@@ -5,8 +5,8 @@ module.exports.createUser = (req, res) => {
   User.create({ name, about, avatar })
     .then((u) => res.status(200).send(u))
     .catch((err) => {
-      const ERROR_CODE = 400;
-      if (err.name === 'ErrorName') res.status(ERROR_CODE).send({ message: `Произошла ошибка ${err}` });
+      if (err.name === 'ValidationError') return res.status(400).send({ message: `Произошла ошибка валидации ${err}` });
+      return res.status(500).send({ message: `Произошла ошибка ${err}` });
     });
 };
 
@@ -18,8 +18,15 @@ module.exports.getUsers = (req, res) => {
 
 module.exports.getUserId = (req, res) => {
   User.findById(req.params.id)
+    .orFail(new Error('Not found'))
     .then((u) => res.status(200).send(u))
-    .catch((err) => res.status(500).send({ message: `Произошла ошибка ${err}` }));
+    .catch((err) => {
+      if (err.message === 'Not found') {
+        res.status(404).send({ message: 'Данного пользователя не существует' });
+      } else {
+        res.status(500).send({ message: `Произошла ошибка ${err}` });
+      }
+    });
 };
 
 module.exports.updateUser = (req, res) => {
@@ -28,10 +35,14 @@ module.exports.updateUser = (req, res) => {
       name: req.body.name,
       about: req.body.about,
     })
+    .orFail(new Error('Not found'))
     .then((u) => res.status(200).send(u))
     .catch((err) => {
-      const ERROR_CODE = 400;
-      if (err.name === 'ErrorName') res.status(ERROR_CODE).send({ message: `Произошла ошибка ${err}` });
+      if (err.message === 'Not found') {
+        res.status(404).send({ message: 'Данного пользователя не существует' });
+      } else {
+        res.status(500).send({ message: `Произошла ошибка ${err}` });
+      }
     });
 };
 
@@ -40,9 +51,16 @@ module.exports.updateAvatar = (req, res) => {
     {
       avatar: req.body.avatar,
     })
+    .orFail(new Error('Not found'))
     .then((u) => res.status(200).send(u))
     .catch((err) => {
-      const ERROR_CODE = 400;
-      if (err.name === 'ErrorName') res.status(ERROR_CODE).send({ message: `Произошла ошибка ${err}` });
+      if (err.message === 'Not found') {
+        res.status(404).send({ message: 'Данного пользователя не существует' });
+      } else {
+        res.status(500).send({ message: `Произошла ошибка ${err}` });
+      }
     });
 };
+
+// const ERROR_CODE = 400;
+//       if (err.name === 'ErrorName') res.status(ERROR_CODE).send({ message: `Произошла ошибка ${err}` });
