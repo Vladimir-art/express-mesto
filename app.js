@@ -1,10 +1,17 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const expressRateLimit = require('express-rate-limit'); // ограничение кол-ва запросов
 
 const { PORT = 3000 } = process.env; // настраиваем порт
 
 const app = express(); // подключаем модуль express
+
+const limiter = expressRateLimit({
+  windowMs: 10 * 60 * 1000, // 10 minutes
+  max: 50,
+  message: 'Too many accounts created from this IP, please try again after an 10 minutes',
+});
 
 const { users } = require('./routes/users'); // подключаем модули с инфой о пользователе(ях)
 const { cards } = require('./routes/cards'); // подключаем модули с инфой с карточками
@@ -16,6 +23,7 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
   useFindAndModify: false,
 });
 
+app.use(limiter); // подключаем ко всем запосам
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true }));
 
