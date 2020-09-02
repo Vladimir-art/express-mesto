@@ -7,8 +7,8 @@ module.exports.createCard = (req, res) => {
   Card.create({ name, link, owner })
     .then((c) => res.status(200).send(c))
     .catch((err) => {
-      const ERROR_CODE = 400;
-      if (err.name === 'ErrorName') res.status(ERROR_CODE).send({ message: `Произошла ошибка ${err}` });
+      if (err.name === 'ValidationError') return res.status(400).send({ message: `Произошла ошибка валидации ${err}` });
+      return res.status(500).send({ message: `Произошла ошибка ${err}` });
     });
 };
 // контроллер по получению списка карточек
@@ -57,7 +57,7 @@ module.exports.dislikeCard = (req, res) => {
       }
     })
     .catch((err) => {
-      const ERROR_CODE = 400;
-      if (err.name === 'ErrorName') res.status(ERROR_CODE).send({ message: `Произошла ошибка ${err}` });
+      if (err.name === 'ValidationError') return res.status(400).send({ message: `Произошла ошибка валидации ${err}` });
+      return res.status(500).send({ message: `Произошла ошибка ${err}` });
     });
 };
